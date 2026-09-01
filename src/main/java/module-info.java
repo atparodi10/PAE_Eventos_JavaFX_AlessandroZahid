@@ -1,6 +1,7 @@
 module ni.edu.uam.pae_eventos_javafx {
     requires javafx.controls;
     requires javafx.fxml;
+    requires static lombok;
 
 
     opens ni.edu.uam.pae_eventos_javafx to javafx.fxml;
