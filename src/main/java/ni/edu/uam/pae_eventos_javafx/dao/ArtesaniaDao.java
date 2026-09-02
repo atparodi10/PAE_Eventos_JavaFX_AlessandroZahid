@@ -3,18 +3,86 @@ package ni.edu.uam.pae_eventos_javafx.dao;
 import ni.edu.uam.pae_eventos_javafx.interfaces.IDAO;
 import ni.edu.uam.pae_eventos_javafx.model.Artesania;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class ArtesaniaDao implements IDAO<Artesania> {
 
-    /*
-     * Es static para conservar los productos mientras la aplicación
-     * permanezca abierta, aunque cierres y abras nuevamente la ventana.
-     */
+    private static final String RUTA_IMAGENES =
+            "/ni/edu/uam/pae_eventos_javafx/images/";
 
-    private static final List<Artesania> artesanias = new ArrayList<>();
+    private static final List<Artesania> artesanias =
+            new ArrayList<>();
+
+    /*
+     * Este bloque se ejecuta una sola vez cuando Java
+     * utiliza ArtesaniaDao por primera vez.
+     */
+    static {
+        cargarProductosIniciales();
+    }
+
+    private static void cargarProductosIniciales() {
+
+        Artesania hamaca = new Artesania(
+                "Hamaca nicaragüense",
+                "ART-001",
+                "Textil",
+                1200.00,
+                5,
+                obtenerRutaImagen("Hamacas.png")
+        );
+
+        Artesania jarron = new Artesania(
+                "Jarrón de barro",
+                "ART-002",
+                "Cerámica",
+                650.00,
+                8,
+                obtenerRutaImagen(
+                        "Jarrones de barro.png"
+                )
+        );
+
+        Artesania mascara = new Artesania(
+                "Máscara del Güegüense",
+                "ART-003",
+                "Decoración",
+                900.00,
+                6,
+                obtenerRutaImagen(
+                        "Mascaras del Gueguense.png"
+                )
+        );
+
+        artesanias.add(hamaca);
+        artesanias.add(jarron);
+        artesanias.add(mascara);
+    }
+
+    private static String obtenerRutaImagen(
+            String nombreImagen) {
+
+        URL recurso = ArtesaniaDao.class
+                .getResource(
+                        RUTA_IMAGENES + nombreImagen
+                );
+
+        if (recurso == null) {
+
+            System.err.println(
+                    "No se encontró la imagen: "
+                            + RUTA_IMAGENES
+                            + nombreImagen
+            );
+
+            return null;
+        }
+
+        return recurso.toExternalForm();
+    }
 
     @Override
     public void guardar(Artesania artesania) {
@@ -25,7 +93,10 @@ public class ArtesaniaDao implements IDAO<Artesania> {
             );
         }
 
-        if (buscarPorId(artesania.getProductoID()) != null) {
+        if (buscarPorId(
+                artesania.getProductoID()
+        ) != null) {
+
             throw new IllegalArgumentException(
                     "Ya existe una artesanía con ese código."
             );
@@ -41,25 +112,25 @@ public class ArtesaniaDao implements IDAO<Artesania> {
 
     @Override
     public List<Artesania> obtenerTodos() {
-
-        /*
-         * Devuelve una copia para evitar que otra clase
-         * modifique directamente la lista del DAO.
-         */
-
         return new ArrayList<>(artesanias);
     }
 
-    public Artesania buscarPorId(String productoId) {
+    public Artesania buscarPorId(
+            String productoId) {
 
-        if (productoId == null || productoId.isBlank()) {
+        if (productoId == null
+                || productoId.isBlank()) {
+
             return null;
         }
 
         for (Artesania artesania : artesanias) {
 
-            if (artesania.getProductoID()
-                    .equalsIgnoreCase(productoId.trim())) {
+            if (artesania
+                    .getProductoID()
+                    .equalsIgnoreCase(
+                            productoId.trim()
+                    )) {
 
                 return artesania;
             }
@@ -70,7 +141,9 @@ public class ArtesaniaDao implements IDAO<Artesania> {
 
     public Artesania buscar(String criterio) {
 
-        if (criterio == null || criterio.isBlank()) {
+        if (criterio == null
+                || criterio.isBlank()) {
+
             return null;
         }
 
