@@ -1,32 +1,65 @@
 package ni.edu.uam.pae_eventos_javafx.dao;
 
+import ni.edu.uam.pae_eventos_javafx.interfaces.IDAO;
 import ni.edu.uam.pae_eventos_javafx.model.Artesania;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ArtesaniaDao {
+public class ArtesaniaDao implements IDAO<Artesania> {
 
-    private static final List<Artesania> artesanias =
-            new ArrayList<>();
+    /*
+     * Es static para conservar los productos mientras la aplicación
+     * permanezca abierta, aunque cierres y abras nuevamente la ventana.
+     */
 
-    public boolean agregar(Artesania artesania) {
+    private static final List<Artesania> artesanias = new ArrayList<>();
+
+    @Override
+    public void guardar(Artesania artesania) {
+
+        if (artesania == null) {
+            throw new IllegalArgumentException(
+                    "La artesanía no puede ser nula."
+            );
+        }
 
         if (buscarPorId(artesania.getProductoID()) != null) {
-            return false;
+            throw new IllegalArgumentException(
+                    "Ya existe una artesanía con ese código."
+            );
         }
 
         artesanias.add(artesania);
-        return true;
+    }
+
+    @Override
+    public void eliminar(Artesania artesania) {
+        artesanias.remove(artesania);
+    }
+
+    @Override
+    public List<Artesania> obtenerTodos() {
+
+        /*
+         * Devuelve una copia para evitar que otra clase
+         * modifique directamente la lista del DAO.
+         */
+
+        return new ArrayList<>(artesanias);
     }
 
     public Artesania buscarPorId(String productoId) {
 
+        if (productoId == null || productoId.isBlank()) {
+            return null;
+        }
+
         for (Artesania artesania : artesanias) {
 
             if (artesania.getProductoID()
-                    .equalsIgnoreCase(productoId)) {
+                    .equalsIgnoreCase(productoId.trim())) {
 
                 return artesania;
             }
@@ -37,31 +70,31 @@ public class ArtesaniaDao {
 
     public Artesania buscar(String criterio) {
 
+        if (criterio == null || criterio.isBlank()) {
+            return null;
+        }
+
         String textoBuscado = criterio
                 .trim()
                 .toLowerCase(Locale.ROOT);
 
         for (Artesania artesania : artesanias) {
 
-            boolean coincideId = artesania
+            String id = artesania
                     .getProductoID()
-                    .toLowerCase(Locale.ROOT)
-                    .contains(textoBuscado);
+                    .toLowerCase(Locale.ROOT);
 
-            boolean coincideNombre = artesania
+            String nombre = artesania
                     .getNombreProducto()
-                    .toLowerCase(Locale.ROOT)
-                    .contains(textoBuscado);
+                    .toLowerCase(Locale.ROOT);
 
-            if (coincideId || coincideNombre) {
+            if (id.contains(textoBuscado)
+                    || nombre.contains(textoBuscado)) {
+
                 return artesania;
             }
         }
 
         return null;
-    }
-
-    public List<Artesania> obtenerTodos() {
-        return new ArrayList<>(artesanias);
     }
 }
