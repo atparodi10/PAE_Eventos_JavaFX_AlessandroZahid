@@ -1,14 +1,328 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="780.0" prefWidth="1240.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ni.edu.uam.pae_eventos_javafx.controllers.ArtesaniaController">
+    <children>
+        <MenuBar layoutX="0.0"
+                 layoutY="0.0"
+                 prefWidth="1240.0">
+            <menus>
+                <Menu mnemonicParsing="false"
+                      text="Catálogo">
+                    <items>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#nuevoOnAction"
+                                  text="Nuevo producto" />
 
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#guardarOnAction"
+                                  text="Guardar producto" />
+
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#buscarOnAction"
+                                  text="Buscar producto" />
+                    </items>
+                </Menu>
+
+                <Menu mnemonicParsing="false"
+                      text="Ventas">
+                    <items>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#registrarVentaOnAction"
+                                  text="Registrar venta seleccionada" />
+                    </items>
+                </Menu>
+
+                <Menu mnemonicParsing="false"
+                      text="Ayuda">
+                    <items>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#mostrarAyudaOnAction"
+                                  text="Cómo utilizar la tienda" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+
+        <Rectangle arcHeight="18.0"
+                   arcWidth="18.0"
+                   fill="#B45F32"
+                   height="90.0"
+                   layoutX="0.0"
+                   layoutY="25.0"
+                   stroke="#B45F32"
+                   width="1240.0" />
+
+        <Label alignment="CENTER"
+               layoutX="290.0"
+               layoutY="40.0"
+               prefWidth="660.0"
+               text="TIENDA DE ARTESANÍAS NICARAGÜENSES"
+               textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="25.0" />
+            </font>
+        </Label>
+
+        <Label alignment="CENTER"
+               layoutX="320.0"
+               layoutY="79.0"
+               prefWidth="600.0"
+               text="Catálogo visual, inventario y registro de ventas"
+               textFill="#FFF0E6">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <ToolBar layoutX="0.0"
+                 layoutY="115.0"
+                 prefHeight="45.0"
+                 prefWidth="1240.0">
+            <items>
+                <Button mnemonicParsing="false"
+                        onAction="#nuevoOnAction"
+                        prefWidth="105.0"
+                        text="Nuevo" />
+
+                <Button mnemonicParsing="false"
+                        onAction="#guardarOnAction"
+                        prefWidth="105.0"
+                        text="Guardar" />
+
+                <Button mnemonicParsing="false"
+                        onAction="#buscarOnAction"
+                        prefWidth="105.0"
+                        text="Buscar" />
+
+                <Separator orientation="VERTICAL" />
+
+                <Button mnemonicParsing="false"
+                        onAction="#registrarVentaOnAction"
+                        prefWidth="150.0"
+                        text="Registrar venta" />
+            </items>
+        </ToolBar>
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#FFF8F2"
+                   height="565.0"
+                   layoutX="20.0"
+                   layoutY="180.0"
+                   stroke="#D49A75"
+                   width="390.0" />
+
+        <Label layoutX="45.0"
+               layoutY="200.0"
+               text="Datos de la artesanía">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="45.0"
+               layoutY="233.0"
+               prefHeight="40.0"
+               prefWidth="340.0"
+               text="Complete los campos y seleccione una imagen antes de guardar."
+               wrapText="true" />
+
+        <Label layoutX="45.0"
+               layoutY="297.0"
+               text="Código:" />
+
+        <TextField fx:id="txtProductoId"
+                   layoutX="150.0"
+                   layoutY="289.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: ART-004" />
+
+        <Label layoutX="45.0"
+               layoutY="342.0"
+               text="Nombre:" />
+
+        <TextField fx:id="txtNombreProducto"
+                   layoutX="150.0"
+                   layoutY="334.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: Canasta de palma" />
+
+        <Label layoutX="45.0"
+               layoutY="387.0"
+               text="Categoría:" />
+
+        <TextField fx:id="txtCategoria"
+                   layoutX="150.0"
+                   layoutY="379.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: Cestería" />
+
+        <Label layoutX="45.0"
+               layoutY="432.0"
+               text="Precio (C$):" />
+
+        <TextField fx:id="txtPrecio"
+                   layoutX="150.0"
+                   layoutY="424.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: 750.00" />
+
+        <Label layoutX="45.0"
+               layoutY="477.0"
+               text="Cantidad:" />
+
+        <TextField fx:id="txtCantidad"
+                   layoutX="150.0"
+                   layoutY="469.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: 10" />
+
+        <StackPane layoutX="45.0"
+                   layoutY="525.0"
+                   prefHeight="145.0"
+                   prefWidth="210.0">
+            <children>
+                <Rectangle arcHeight="14.0"
+                           arcWidth="14.0"
+                           fill="#F4E5D4"
+                           height="145.0"
+                           stroke="#B45F32"
+                           width="210.0" />
+
+                <Label text="Vista previa"
+                       textFill="#7A4A2E" />
+
+                <ImageView fx:id="imgVistaPrevia"
+                           fitHeight="135.0"
+                           fitWidth="200.0"
+                           pickOnBounds="true"
+                           preserveRatio="true" />
+            </children>
+        </StackPane>
+
+        <Button layoutX="270.0"
+                layoutY="550.0"
+                mnemonicParsing="false"
+                onAction="#seleccionarImagenOnAction"
+                prefHeight="38.0"
+                prefWidth="115.0"
+                text="Elegir imagen" />
+
+        <Label layoutX="270.0"
+               layoutY="600.0"
+               prefHeight="45.0"
+               prefWidth="115.0"
+               text="PNG, JPG o JPEG"
+               wrapText="true" />
+
+        <Button layoutX="270.0"
+                layoutY="674.0"
+                mnemonicParsing="false"
+                onAction="#guardarOnAction"
+                prefHeight="38.0"
+                prefWidth="115.0"
+                text="Guardar" />
+
+        <Label layoutX="435.0"
+               layoutY="185.0"
+               text="Catálogo disponible">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="435.0"
+               layoutY="217.0"
+               prefWidth="780.0"
+               text="Seleccione una artesanía para registrar una venta. Cada producto muestra su imagen correspondiente."
+               wrapText="true" />
+
+        <TableView fx:id="tblArtesanias"
+                   fixedCellSize="60.0"
+                   layoutX="435.0"
+                   layoutY="260.0"
+                   prefHeight="415.0"
+                   prefWidth="785.0">
+            <placeholder>
+                <Label text="No hay artesanías disponibles en el catálogo." />
+            </placeholder>
+            <columns>
+                <TableColumn fx:id="colImagen"
+                             minWidth="95.0"
+                             prefWidth="105.0"
+                             text="Imagen" />
+
+                <TableColumn fx:id="colProductoId"
+                             minWidth="90.0"
+                             prefWidth="100.0"
+                             text="Código" />
+
+                <TableColumn fx:id="colNombreProducto"
+                             minWidth="145.0"
+                             prefWidth="185.0"
+                             text="Producto" />
+
+                <TableColumn fx:id="colCategoria"
+                             minWidth="110.0"
+                             prefWidth="135.0"
+                             text="Categoría" />
+
+                <TableColumn fx:id="colPrecio"
+                             minWidth="90.0"
+                             prefWidth="105.0"
+                             text="Precio C$" />
+
+                <TableColumn fx:id="colCantidad"
+                             minWidth="85.0"
+                             prefWidth="95.0"
+                             text="Cantidad" />
+            </columns>
+        </TableView>
+
+        <Button layoutX="850.0"
+                layoutY="695.0"
+                mnemonicParsing="false"
+                onAction="#buscarOnAction"
+                prefHeight="38.0"
+                prefWidth="140.0"
+                text="Buscar producto" />
+
+        <Button layoutX="1005.0"
+                layoutY="695.0"
+                mnemonicParsing="false"
+                onAction="#registrarVentaOnAction"
+                prefHeight="38.0"
+                prefWidth="180.0"
+                text="Vender selección" />
+
+        <Label alignment="CENTER"
+               layoutX="430.0"
+               layoutY="750.0"
+               prefWidth="790.0"
+               text="Use el menú Catálogo para crear o buscar y el menú Ventas para descontar existencias." />
+    </children>
 </AnchorPane>
