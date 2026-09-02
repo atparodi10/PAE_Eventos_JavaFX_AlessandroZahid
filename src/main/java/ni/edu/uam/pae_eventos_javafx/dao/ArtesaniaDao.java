@@ -8,7 +8,8 @@ import java.util.Locale;
 
 public class ArtesaniaDao {
 
-    private final List<Artesania> artesanias = new ArrayList<>();
+    private static final List<Artesania> artesanias =
+            new ArrayList<>();
 
     public boolean agregar(Artesania artesania) {
 
