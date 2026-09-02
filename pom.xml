@@ -68,7 +68,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>ni.edu.uam.pae_eventos_javafx/ni.edu.uam.pae_eventos_javafx.HelloApplication
+                            <mainClass>ni.edu.uam.pae_eventos_javafx/ni.edu.uam.pae_eventos_javafx.MainApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

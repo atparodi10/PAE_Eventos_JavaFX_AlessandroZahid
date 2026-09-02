@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="740.0" prefWidth="1180.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ni.edu.uam.pae_eventos_javafx.controllers.CafeController">
+    <children>
+        <Rectangle arcHeight="18.0"
+                   arcWidth="18.0"
+                   fill="#6F4E37"
+                   height="100.0"
+                   layoutX="0.0"
+                   layoutY="0.0"
+                   stroke="#6F4E37"
+                   width="1180.0" />
+
+        <Label alignment="CENTER"
+               layoutX="340.0"
+               layoutY="18.0"
+               prefWidth="500.0"
+               text="RECEPCIÓN DE CAFÉ"
+               textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="26.0" />
+            </font>
+        </Label>
+
+        <Label alignment="CENTER"
+               layoutX="290.0"
+               layoutY="60.0"
+               prefWidth="600.0"
+               text="Control de lotes, proveedores y fechas de vencimiento"
+               textFill="#F4E6D7">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <Separator layoutX="0.0"
+                   layoutY="100.0"
+                   prefWidth="1180.0" />
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#FBF7F4"
+                   height="570.0"
+                   layoutX="20.0"
+                   layoutY="125.0"
+                   stroke="#A1887F"
+                   width="420.0" />
+
+        <Label layoutX="45.0"
+               layoutY="145.0"
+               text="Registrar nuevo lote">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="45.0"
+               layoutY="178.0"
+               prefWidth="370.0"
+               text="Ingrese los datos proporcionados por el proveedor."
+               wrapText="true" />
+
+        <Label layoutX="45.0"
+               layoutY="228.0"
+               text="Código del lote:" />
+
+        <TextField fx:id="txtCodigoLote"
+                   layoutX="175.0"
+                   layoutY="220.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: 00001001" />
+
+        <Label layoutX="45.0"
+               layoutY="278.0"
+               text="Producto:" />
+
+        <TextField fx:id="txtNombreProducto"
+                   layoutX="175.0"
+                   layoutY="270.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: Café Segovia" />
+
+        <Label layoutX="45.0"
+               layoutY="328.0"
+               text="Código producto:" />
+
+        <TextField fx:id="txtCodigoProducto"
+                   layoutX="175.0"
+                   layoutY="320.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: 00002001" />
+
+        <Label layoutX="45.0"
+               layoutY="378.0"
+               text="Proveedor:" />
+
+        <TextField fx:id="txtProveedor"
+                   layoutX="175.0"
+                   layoutY="370.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: Finca Santa Ana" />
+
+        <Label layoutX="45.0"
+               layoutY="428.0"
+               text="Producción:" />
+
+        <DatePicker fx:id="dpFechaProduccion"
+                    layoutX="175.0"
+                    layoutY="420.0"
+                    prefHeight="32.0"
+                    prefWidth="235.0"
+                    promptText="Fecha pasada o actual" />
+
+        <Label layoutX="45.0"
+               layoutY="478.0"
+               text="Vencimiento:" />
+
+        <DatePicker fx:id="dpFechaVencimiento"
+                    layoutX="175.0"
+                    layoutY="470.0"
+                    prefHeight="32.0"
+                    prefWidth="235.0"
+                    promptText="Fecha actual o futura" />
+
+        <Label layoutX="45.0"
+               layoutY="528.0"
+               text="Cantidad:" />
+
+        <TextField fx:id="txtCantidad"
+                   layoutX="175.0"
+                   layoutY="520.0"
+                   prefHeight="32.0"
+                   prefWidth="235.0"
+                   promptText="Ejemplo: 150" />
+
+        <Label layoutX="45.0"
+               layoutY="575.0"
+               prefHeight="42.0"
+               prefWidth="235.0"
+               text="Los códigos deben tener exactamente 8 dígitos."
+               wrapText="true" />
+
+        <Button layoutX="285.0"
+                layoutY="580.0"
+                mnemonicParsing="false"
+                onAction="#onGuardarAction"
+                prefHeight="40.0"
+                prefWidth="125.0"
+                text="Guardar lote" />
+
+        <Label layoutX="465.0"
+               layoutY="128.0"
+               text="Lotes recibidos">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="465.0"
+               layoutY="160.0"
+               prefWidth="690.0"
+               text="Haga clic en una fila para consultar sus datos. Use clic derecho para eliminar el lote seleccionado."
+               wrapText="true" />
+
+        <TableView fx:id="tablaLotes"
+                   layoutX="465.0"
+                   layoutY="205.0"
+                   onMouseClicked="#onTablaMouseClicked"
+                   prefHeight="490.0"
+                   prefWidth="695.0">
+            <placeholder>
+                <Label text="Aún no se han registrado lotes de café." />
+            </placeholder>
+            <columns>
+                <TableColumn prefWidth="85.0"
+                             text="Lote">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="codigoLote" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="110.0"
+                             text="Producto">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nombreProducto" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="85.0"
+                             text="Código">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="codigoProducto" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="105.0"
+                             text="Proveedor">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="proveedor" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="100.0"
+                             text="Producción">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="fechaProduccion" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="105.0"
+                             text="Vencimiento">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="fechaVencimiento" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn prefWidth="85.0"
+                             text="Cantidad">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="cantidad" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+
+        <Label alignment="CENTER"
+               layoutX="340.0"
+               layoutY="710.0"
+               prefWidth="500.0"
+               text="Las fechas se validan automáticamente antes de guardar." />
+    </children>
+</AnchorPane>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="540.0" prefWidth="720.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ni.edu.uam.pae_eventos_javafx.controllers.PulperiaController">
+    <children>
+        <Rectangle arcHeight="18.0"
+                   arcWidth="18.0"
+                   fill="#2E7D32"
+                   height="100.0"
+                   layoutX="0.0"
+                   layoutY="0.0"
+                   stroke="#2E7D32"
+                   width="720.0" />
+
+        <Label alignment="CENTER"
+               layoutX="110.0"
+               layoutY="20.0"
+               prefWidth="500.0"
+               text="INVENTARIO DE PULPERÍA"
+               textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="25.0" />
+            </font>
+        </Label>
+
+        <Label alignment="CENTER"
+               layoutX="110.0"
+               layoutY="60.0"
+               prefWidth="500.0"
+               text="Registro rápido y búsqueda por código"
+               textFill="#E8F5E9">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <Separator layoutX="0.0"
+                   layoutY="100.0"
+                   prefWidth="720.0" />
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#F4FBF4"
+                   height="320.0"
+                   layoutX="55.0"
+                   layoutY="130.0"
+                   stroke="#81C784"
+                   width="610.0" />
+
+        <Label layoutX="85.0"
+               layoutY="150.0"
+               text="Datos del producto">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="90.0"
+               layoutY="202.0"
+               text="Código:" />
+
+        <TextField fx:id="txtCodigo"
+                   layoutX="220.0"
+                   layoutY="195.0"
+                   onKeyPressed="#onBuscarKey"
+                   prefHeight="32.0"
+                   prefWidth="390.0"
+                   promptText="Ejemplo: 00001234 · Enter para buscar" />
+
+        <Label layoutX="90.0"
+               layoutY="252.0"
+               text="Nombre:" />
+
+        <TextField fx:id="txtNombre"
+                   layoutX="220.0"
+                   layoutY="245.0"
+                   prefHeight="32.0"
+                   prefWidth="390.0"
+                   promptText="Ejemplo: Arroz nacional" />
+
+        <Label layoutX="90.0"
+               layoutY="302.0"
+               text="Precio (C$):" />
+
+        <TextField fx:id="txtPrecio"
+                   layoutX="220.0"
+                   layoutY="295.0"
+                   prefHeight="32.0"
+                   prefWidth="390.0"
+                   promptText="Ejemplo: 45.50" />
+
+        <Label layoutX="90.0"
+               layoutY="352.0"
+               text="Cantidad:" />
+
+        <TextField fx:id="txtCantidad"
+                   layoutX="220.0"
+                   layoutY="345.0"
+                   prefHeight="32.0"
+                   prefWidth="390.0"
+                   promptText="Ejemplo: 20" />
+
+        <Label layoutX="90.0"
+               layoutY="398.0"
+               prefWidth="345.0"
+               text="El código debe contener exactamente 8 números."
+               wrapText="true" />
+
+        <Button layoutX="455.0"
+                layoutY="395.0"
+                mnemonicParsing="false"
+                onAction="#onGuardarAction"
+                prefHeight="38.0"
+                prefWidth="155.0"
+                text="Guardar producto" />
+
+        <Label alignment="CENTER"
+               layoutX="110.0"
+               layoutY="480.0"
+               prefWidth="500.0"
+               text="Complete todos los campos para registrar el producto." />
+    </children>
+</AnchorPane>
