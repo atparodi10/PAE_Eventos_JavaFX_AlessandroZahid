@@ -13,109 +13,346 @@ import ni.edu.uam.pae_eventos_javafx.model.Producto;
 
 public class PulperiaController {
 
-    @FXML private TextField txtCodigo;
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtPrecio;
-    @FXML private TextField txtCantidad;
+    @FXML
+    private TextField txtCodigo;
 
-    private IDAO<Producto> productoDao = new ProductoDao();
+    @FXML
+    private TextField txtNombre;
+
+    @FXML
+    private TextField txtPrecio;
+
+    @FXML
+    private TextField txtCantidad;
+
+    private final IDAO<Producto> productoDao =
+            new ProductoDao();
 
     @FXML
     public void initialize() {
+
         aplicarRestriccionesDeEntrada();
+
+        txtCodigo.requestFocus();
     }
 
-    // El evento del botón solo llama al método orquestador
     @FXML
-    public void onGuardarAction(ActionEvent event) {
+    public void onGuardarAction(
+            ActionEvent event) {
+
         procesarGuardado();
     }
 
-    // El evento del teclado solo llama al método orquestador
     @FXML
-    public void onBuscarKey(KeyEvent event) {
+    public void onBuscarKey(
+            KeyEvent event) {
+
         if (event.getCode() == KeyCode.ENTER) {
             ejecutarBusqueda();
         }
     }
 
     private void aplicarRestriccionesDeEntrada() {
-        // Código: Solo números, máximo 8 dígitos
-        txtCodigo.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().matches("\\d{0,8}") ? change : null));
 
-        // Nombre: Solo letras y espacios
-        txtNombre.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*") ? change : null));
+        /*
+         * Código:
+         * solamente números y máximo 8 dígitos.
+         */
+        txtCodigo.setTextFormatter(
+                new TextFormatter<>(change -> {
 
-        // Precio: Solo números y un punto decimal
-        txtPrecio.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null));
+                    String nuevoTexto =
+                            change.getControlNewText();
 
-        // Cantidad: Solo números enteros
-        txtCantidad.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().matches("\\d*") ? change : null));
+                    if (nuevoTexto.matches("\\d{0,8}")) {
+                        return change;
+                    }
+
+                    return null;
+                })
+        );
+
+        /*
+         * Nombre:
+         * solamente letras y espacios.
+         */
+        txtNombre.setTextFormatter(
+                new TextFormatter<>(change -> {
+
+                    String nuevoTexto =
+                            change.getControlNewText();
+
+                    if (nuevoTexto.matches(
+                            "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]*"
+                    )) {
+                        return change;
+                    }
+
+                    return null;
+                })
+        );
+
+        /*
+         * Precio:
+         * números y solamente un punto decimal.
+         */
+        txtPrecio.setTextFormatter(
+                new TextFormatter<>(change -> {
+
+                    String nuevoTexto =
+                            change.getControlNewText();
+
+                    if (nuevoTexto.matches(
+                            "\\d*(\\.\\d*)?"
+                    )) {
+                        return change;
+                    }
+
+                    return null;
+                })
+        );
+
+        /*
+         * Cantidad:
+         * solamente números enteros.
+         */
+        txtCantidad.setTextFormatter(
+                new TextFormatter<>(change -> {
+
+                    String nuevoTexto =
+                            change.getControlNewText();
+
+                    if (nuevoTexto.matches("\\d*")) {
+                        return change;
+                    }
+
+                    return null;
+                })
+        );
     }
 
     private void procesarGuardado() {
-        if (!validarCamposCompletos() || !validarLongitudCodigo(txtCodigo.getText())) return;
 
-        Producto nuevoProducto = new Producto(
-                txtCodigo.getText(),
-                txtNombre.getText(),
-                Double.parseDouble(txtPrecio.getText()),
-                Integer.parseInt(txtCantidad.getText())
-        );
+        if (!validarCamposCompletos()) {
+            return;
+        }
 
-        productoDao.guardar(nuevoProducto);
-        mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Producto registrado.");
-        limpiarCampos();
+        String codigo =
+                txtCodigo.getText().trim();
+
+        if (!validarLongitudCodigo(codigo)) {
+            return;
+        }
+
+        try {
+
+            double precio =
+                    Double.parseDouble(
+                            txtPrecio.getText().trim()
+                    );
+
+            int cantidad =
+                    Integer.parseInt(
+                            txtCantidad.getText().trim()
+                    );
+
+            if (precio <= 0) {
+
+                mostrarAlerta(
+                        Alert.AlertType.ERROR,
+                        "Precio incorrecto",
+                        "El precio debe ser mayor que cero."
+                );
+
+                return;
+            }
+
+            if (cantidad < 0) {
+
+                mostrarAlerta(
+                        Alert.AlertType.ERROR,
+                        "Cantidad incorrecta",
+                        "La cantidad no puede ser negativa."
+                );
+
+                return;
+            }
+
+            if (buscarProductoPorCodigo(codigo) != null) {
+
+                mostrarAlerta(
+                        Alert.AlertType.WARNING,
+                        "Código repetido",
+                        "Ya existe un producto con el código "
+                                + codigo + "."
+                );
+
+                return;
+            }
+
+            Producto nuevoProducto =
+                    new Producto(
+                            codigo,
+                            txtNombre.getText().trim(),
+                            precio,
+                            cantidad
+                    );
+
+            productoDao.guardar(nuevoProducto);
+
+            /*
+             * Los campos se limpian solamente
+             * si el producto fue guardado.
+             */
+            limpiarCampos();
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Producto registrado",
+                    "El producto fue guardado correctamente."
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Datos incorrectos",
+                    "El precio y la cantidad deben ser números válidos."
+            );
+        }
     }
 
     private void ejecutarBusqueda() {
-        String codigoBuscado = txtCodigo.getText();
-        if (codigoBuscado.isEmpty()) return;
 
-        Producto encontrado = productoDao.obtenerTodos().stream()
-                .filter(p -> p.getCodigo().equals(codigoBuscado))
+        String codigoBuscado =
+                txtCodigo.getText().trim();
+
+        if (codigoBuscado.isEmpty()) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Código requerido",
+                    "Ingrese el código del producto que desea buscar."
+            );
+
+            return;
+        }
+
+        if (!validarLongitudCodigo(codigoBuscado)) {
+            return;
+        }
+
+        Producto productoEncontrado =
+                buscarProductoPorCodigo(
+                        codigoBuscado
+                );
+
+        if (productoEncontrado == null) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Producto no encontrado",
+                    "No existe ningún producto con el código "
+                            + codigoBuscado + "."
+            );
+
+            return;
+        }
+
+        txtNombre.setText(
+                productoEncontrado.getNombre()
+        );
+
+        txtPrecio.setText(
+                String.valueOf(
+                        productoEncontrado.getPrecio()
+                )
+        );
+
+        txtCantidad.setText(
+                String.valueOf(
+                        productoEncontrado.getCantidad()
+                )
+        );
+
+        mostrarAlerta(
+                Alert.AlertType.INFORMATION,
+                "Producto encontrado",
+                "Los datos del producto fueron cargados."
+        );
+    }
+
+    private Producto buscarProductoPorCodigo(
+            String codigoBuscado) {
+
+        return productoDao
+                .obtenerTodos()
+                .stream()
+                .filter(producto ->
+                        producto
+                                .getCodigo()
+                                .equals(codigoBuscado)
+                )
                 .findFirst()
                 .orElse(null);
-
-        if (encontrado != null) {
-            txtNombre.setText(encontrado.getNombre());
-            txtPrecio.setText(String.valueOf(encontrado.getPrecio()));
-            txtCantidad.setText(String.valueOf(encontrado.getCantidad()));
-        } else {
-            mostrarAlerta(Alert.AlertType.WARNING, "Aviso", "Producto no encontrado.");
-        }
     }
 
     private boolean validarCamposCompletos() {
-        if (txtCodigo.getText().isEmpty() || txtNombre.getText().isEmpty() ||
-                txtPrecio.getText().isEmpty() || txtCantidad.getText().isEmpty()) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Todos los campos son obligatorios.");
+
+        boolean camposVacios =
+                txtCodigo.getText().isBlank()
+                        || txtNombre.getText().isBlank()
+                        || txtPrecio.getText().isBlank()
+                        || txtCantidad.getText().isBlank();
+
+        if (camposVacios) {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Campos incompletos",
+                    "Todos los campos son obligatorios."
+            );
+
             return false;
         }
+
         return true;
     }
 
-    private boolean validarLongitudCodigo(String codigo) {
+    private boolean validarLongitudCodigo(
+            String codigo) {
+
         if (codigo.length() != 8) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "El código debe tener exactamente 8 dígitos.");
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Código incorrecto",
+                    "El código debe tener exactamente 8 dígitos."
+            );
+
             return false;
         }
+
         return true;
     }
 
     private void limpiarCampos() {
+
         txtCodigo.clear();
         txtNombre.clear();
         txtPrecio.clear();
         txtCantidad.clear();
+
+        txtCodigo.requestFocus();
     }
 
-    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
+    private void mostrarAlerta(
+            Alert.AlertType tipo,
+            String titulo,
+            String mensaje) {
+
         Alert alerta = new Alert(tipo);
+
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
