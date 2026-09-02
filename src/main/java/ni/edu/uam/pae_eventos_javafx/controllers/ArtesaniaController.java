@@ -12,7 +12,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-
 import ni.edu.uam.pae_eventos_javafx.dao.ArtesaniaDao;
 import ni.edu.uam.pae_eventos_javafx.model.Artesania;
 
@@ -105,11 +104,19 @@ public class ArtesaniaController {
                         )
                 )
         );
+
+        /*
+         * Cuando se abre la ventana desde el menú,
+         * carga en la tabla los productos del DAO.
+         */
+        actualizarTabla();
     }
 
     @FXML
     private void nuevoOnAction(ActionEvent event) {
+
         limpiarFormulario();
+
         tblArtesanias
                 .getSelectionModel()
                 .clearSelection();
@@ -153,23 +160,15 @@ public class ArtesaniaController {
                     rutaImagenSeleccionada
             );
 
-            boolean agregado =
-                    artesaniaDao.agregar(artesania);
+            /*
+             * guardar() viene de IDAO<Artesania>.
+             */
+            artesaniaDao.guardar(artesania);
 
-            if (!agregado) {
-
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Código repetido",
-                        "Ya existe una artesanía con ese código."
-                );
-
-                return;
-            }
-
-            tblArtesanias
-                    .getItems()
-                    .add(artesania);
+            /*
+             * La tabla vuelve a consultar los registros del DAO.
+             */
+            actualizarTabla();
 
             mostrarAlerta(
                     Alert.AlertType.INFORMATION,
@@ -185,6 +184,18 @@ public class ArtesaniaController {
                     Alert.AlertType.WARNING,
                     "Datos incorrectos",
                     "Ingrese un precio y una cantidad válidos."
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            /*
+             * Aquí se muestra, por ejemplo, el error
+             * producido por un código repetido.
+             */
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "No se pudo guardar",
+                    e.getMessage()
             );
         }
     }
@@ -235,7 +246,8 @@ public class ArtesaniaController {
     private void seleccionarImagenOnAction(
             ActionEvent event) {
 
-        FileChooser selector = new FileChooser();
+        FileChooser selector =
+                new FileChooser();
 
         selector.setTitle(
                 "Seleccionar imagen de la artesanía"
@@ -325,12 +337,9 @@ public class ArtesaniaController {
                 return;
             }
 
-            int nuevaCantidad =
-                    seleccionada.getCantidadDisponible()
-                            - cantidadVendida;
-
             seleccionada.setCantidadDisponible(
-                    nuevaCantidad
+                    seleccionada.getCantidadDisponible()
+                            - cantidadVendida
             );
 
             tblArtesanias.refresh();
@@ -372,6 +381,18 @@ public class ArtesaniaController {
                 Ventas descuenta productos del inventario.
                 """
         );
+    }
+
+    private void actualizarTabla() {
+
+        /*
+         * obtenerTodos() viene de IDAO<Artesania>.
+         */
+        tblArtesanias
+                .getItems()
+                .setAll(
+                        artesaniaDao.obtenerTodos()
+                );
     }
 
     private boolean formularioValido() {
