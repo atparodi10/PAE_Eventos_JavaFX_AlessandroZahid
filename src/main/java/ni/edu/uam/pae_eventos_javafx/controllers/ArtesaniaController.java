@@ -67,53 +67,69 @@ public class ArtesaniaController {
     @FXML
     public void initialize() {
 
-        colProductoId.setCellValueFactory(dato ->
-                new ReadOnlyStringWrapper(
-                        dato.getValue().getProductoID()
-                )
-        );
+        configurarColumnas();
 
-        colNombreProducto.setCellValueFactory(dato ->
-                new ReadOnlyStringWrapper(
-                        dato.getValue().getNombreProducto()
-                )
-        );
-
-        colCategoria.setCellValueFactory(dato ->
-                new ReadOnlyStringWrapper(
-                        dato.getValue().getProductoCategoria()
-                )
-        );
-
-        colPrecio.setCellValueFactory(dato ->
-                new ReadOnlyObjectWrapper<>(
-                        dato.getValue().getPrecio()
-                )
-        );
-
-        colCantidad.setCellValueFactory(dato ->
-                new ReadOnlyObjectWrapper<>(
-                        dato.getValue().getCantidadDisponible()
-                )
-        );
-
-        colImagen.setCellValueFactory(dato ->
-                new ReadOnlyObjectWrapper<>(
-                        crearVistaImagen(
-                                dato.getValue().getRutaImagen()
-                        )
-                )
-        );
-
-        /*
-         * Cuando se abre la ventana desde el menú,
-         * carga en la tabla los productos del DAO.
-         */
         actualizarTabla();
+
+        txtProductoId.requestFocus();
+    }
+
+    private void configurarColumnas() {
+
+        colProductoId.setCellValueFactory(
+                dato ->
+                        new ReadOnlyStringWrapper(
+                                dato.getValue()
+                                        .getProductoID()
+                        )
+        );
+
+        colNombreProducto.setCellValueFactory(
+                dato ->
+                        new ReadOnlyStringWrapper(
+                                dato.getValue()
+                                        .getNombreProducto()
+                        )
+        );
+
+        colCategoria.setCellValueFactory(
+                dato ->
+                        new ReadOnlyStringWrapper(
+                                dato.getValue()
+                                        .getProductoCategoria()
+                        )
+        );
+
+        colPrecio.setCellValueFactory(
+                dato ->
+                        new ReadOnlyObjectWrapper<>(
+                                dato.getValue()
+                                        .getPrecio()
+                        )
+        );
+
+        colCantidad.setCellValueFactory(
+                dato ->
+                        new ReadOnlyObjectWrapper<>(
+                                dato.getValue()
+                                        .getCantidadDisponible()
+                        )
+        );
+
+        colImagen.setCellValueFactory(
+                dato ->
+                        new ReadOnlyObjectWrapper<>(
+                                crearVistaImagen(
+                                        dato.getValue()
+                                                .getRutaImagen()
+                                )
+                        )
+        );
     }
 
     @FXML
-    private void nuevoOnAction(ActionEvent event) {
+    private void nuevoOnAction(
+            ActionEvent event) {
 
         limpiarFormulario();
 
@@ -123,7 +139,8 @@ public class ArtesaniaController {
     }
 
     @FXML
-    private void guardarOnAction(ActionEvent event) {
+    private void guardarOnAction(
+            ActionEvent event) {
 
         if (!formularioValido()) {
             return;
@@ -131,44 +148,71 @@ public class ArtesaniaController {
 
         try {
 
-            double precio = Double.parseDouble(
-                    txtPrecio.getText().trim()
-            );
+            double precio =
+                    Double.parseDouble(
+                            txtPrecio
+                                    .getText()
+                                    .trim()
+                    );
 
-            int cantidad = Integer.parseInt(
-                    txtCantidad.getText().trim()
-            );
+            int cantidad =
+                    Integer.parseInt(
+                            txtCantidad
+                                    .getText()
+                                    .trim()
+                    );
 
-            if (precio <= 0 || cantidad < 0) {
+            if (precio <= 0) {
 
                 mostrarAlerta(
                         Alert.AlertType.WARNING,
-                        "Valores incorrectos",
-                        "El precio debe ser mayor que cero "
-                                + "y la cantidad no puede ser negativa."
+                        "Precio incorrecto",
+                        "El precio debe ser mayor que cero."
                 );
 
                 return;
             }
 
-            Artesania artesania = new Artesania(
-                    txtNombreProducto.getText().trim(),
-                    txtProductoId.getText().trim(),
-                    txtCategoria.getText().trim(),
-                    precio,
-                    cantidad,
-                    rutaImagenSeleccionada
-            );
+            if (cantidad < 0) {
 
-            /*
-             * guardar() viene de IDAO<Artesania>.
-             */
+                mostrarAlerta(
+                        Alert.AlertType.WARNING,
+                        "Cantidad incorrecta",
+                        "La cantidad no puede ser negativa."
+                );
+
+                return;
+            }
+
+            Artesania artesania =
+                    new Artesania(
+                            txtNombreProducto
+                                    .getText()
+                                    .trim(),
+                            txtProductoId
+                                    .getText()
+                                    .trim(),
+                            txtCategoria
+                                    .getText()
+                                    .trim(),
+                            precio,
+                            cantidad,
+                            rutaImagenSeleccionada
+                    );
+
             artesaniaDao.guardar(artesania);
 
-            /*
-             * La tabla vuelve a consultar los registros del DAO.
-             */
             actualizarTabla();
+
+            /*
+             * El formulario y la imagen
+             * se limpian después de guardar.
+             */
+            limpiarFormulario();
+
+            tblArtesanias
+                    .getSelectionModel()
+                    .clearSelection();
 
             mostrarAlerta(
                     Alert.AlertType.INFORMATION,
@@ -176,22 +220,16 @@ public class ArtesaniaController {
                     "La artesanía fue agregada al catálogo."
             );
 
-            limpiarFormulario();
-
         } catch (NumberFormatException e) {
 
             mostrarAlerta(
                     Alert.AlertType.WARNING,
                     "Datos incorrectos",
-                    "Ingrese un precio y una cantidad válidos."
+                    "El precio y la cantidad deben ser números válidos."
             );
 
         } catch (IllegalArgumentException e) {
 
-            /*
-             * Aquí se muestra, por ejemplo, el error
-             * producido por un código repetido.
-             */
             mostrarAlerta(
                     Alert.AlertType.WARNING,
                     "No se pudo guardar",
@@ -201,7 +239,8 @@ public class ArtesaniaController {
     }
 
     @FXML
-    private void buscarOnAction(ActionEvent event) {
+    private void buscarOnAction(
+            ActionEvent event) {
 
         TextInputDialog dialogo =
                 new TextInputDialog();
@@ -210,7 +249,9 @@ public class ArtesaniaController {
         dialogo.setHeaderText(
                 "Buscar por código o nombre"
         );
-        dialogo.setContentText("Criterio:");
+        dialogo.setContentText(
+                "Ingrese el criterio:"
+        );
 
         Optional<String> resultado =
                 dialogo.showAndWait();
@@ -222,7 +263,9 @@ public class ArtesaniaController {
         }
 
         Artesania encontrada =
-                artesaniaDao.buscar(resultado.get());
+                artesaniaDao.buscar(
+                        resultado.get()
+                );
 
         if (encontrada == null) {
 
@@ -253,30 +296,38 @@ public class ArtesaniaController {
                 "Seleccionar imagen de la artesanía"
         );
 
-        selector.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(
-                        "Imágenes",
-                        "*.png",
-                        "*.jpg",
-                        "*.jpeg"
+        selector
+                .getExtensionFilters()
+                .add(
+                        new FileChooser.ExtensionFilter(
+                                "Imágenes",
+                                "*.png",
+                                "*.jpg",
+                                "*.jpeg"
+                        )
+                );
+
+        File archivo =
+                selector.showOpenDialog(
+                        imgVistaPrevia
+                                .getScene()
+                                .getWindow()
+                );
+
+        if (archivo == null) {
+            return;
+        }
+
+        rutaImagenSeleccionada =
+                archivo
+                        .toURI()
+                        .toString();
+
+        imgVistaPrevia.setImage(
+                new Image(
+                        rutaImagenSeleccionada
                 )
         );
-
-        File archivo = selector.showOpenDialog(
-                imgVistaPrevia
-                        .getScene()
-                        .getWindow()
-        );
-
-        if (archivo != null) {
-
-            rutaImagenSeleccionada =
-                    archivo.toURI().toString();
-
-            imgVistaPrevia.setImage(
-                    new Image(rutaImagenSeleccionada)
-            );
-        }
     }
 
     @FXML
@@ -293,7 +344,19 @@ public class ArtesaniaController {
             mostrarAlerta(
                     Alert.AlertType.WARNING,
                     "Seleccione un producto",
-                    "Seleccione una artesanía de la tabla."
+                    "Debe seleccionar una artesanía de la tabla."
+            );
+
+            return;
+        }
+
+        if (seleccionada
+                .getCantidadDisponible() == 0) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Producto agotado",
+                    "La artesanía seleccionada no tiene existencias."
             );
 
             return;
@@ -303,15 +366,21 @@ public class ArtesaniaController {
                 new TextInputDialog("1");
 
         dialogo.setTitle("Registrar venta");
+
         dialogo.setHeaderText(
                 seleccionada.getNombreProducto()
         );
-        dialogo.setContentText("Cantidad vendida:");
+
+        dialogo.setContentText(
+                "Cantidad vendida:"
+        );
 
         Optional<String> resultado =
                 dialogo.showAndWait();
 
-        if (resultado.isEmpty()) {
+        if (resultado.isEmpty()
+                || resultado.get().isBlank()) {
+
             return;
         }
 
@@ -319,26 +388,41 @@ public class ArtesaniaController {
 
             int cantidadVendida =
                     Integer.parseInt(
-                            resultado.get().trim()
+                            resultado
+                                    .get()
+                                    .trim()
                     );
 
-            if (cantidadVendida <= 0
-                    || cantidadVendida
-                    > seleccionada.getCantidadDisponible()) {
+            if (cantidadVendida <= 0) {
 
                 mostrarAlerta(
                         Alert.AlertType.WARNING,
-                        "Cantidad no disponible",
-                        "Ingrese una cantidad entre 1 y "
+                        "Cantidad incorrecta",
+                        "La cantidad debe ser mayor que cero."
+                );
+
+                return;
+            }
+
+            if (cantidadVendida
+                    > seleccionada
+                    .getCantidadDisponible()) {
+
+                mostrarAlerta(
+                        Alert.AlertType.WARNING,
+                        "Existencias insuficientes",
+                        "Solamente hay "
                                 + seleccionada
                                 .getCantidadDisponible()
+                                + " unidades disponibles."
                 );
 
                 return;
             }
 
             seleccionada.setCantidadDisponible(
-                    seleccionada.getCantidadDisponible()
+                    seleccionada
+                            .getCantidadDisponible()
                             - cantidadVendida
             );
 
@@ -352,7 +436,9 @@ public class ArtesaniaController {
                     Alert.AlertType.INFORMATION,
                     "Venta registrada",
                     String.format(
-                            "Total de la venta: C$ %.2f",
+                            "Cantidad vendida: %d%n"
+                                    + "Total: C$ %.2f",
+                            cantidadVendida,
                             total
                     )
             );
@@ -376,18 +462,20 @@ public class ArtesaniaController {
                 "Ayuda",
                 """
                 Nuevo limpia el formulario.
-                Guardar agrega una artesanía.
-                Buscar localiza por código o nombre.
-                Ventas descuenta productos del inventario.
+
+                Guardar agrega una artesanía al catálogo.
+
+                Buscar localiza un producto por código o nombre.
+
+                Registrar venta descuenta unidades del inventario.
+
+                Para agregar un producto debe seleccionar una imagen.
                 """
         );
     }
 
     private void actualizarTabla() {
 
-        /*
-         * obtenerTodos() viene de IDAO<Artesania>.
-         */
         tblArtesanias
                 .getItems()
                 .setAll(
@@ -397,21 +485,41 @@ public class ArtesaniaController {
 
     private boolean formularioValido() {
 
-        boolean hayCamposVacios =
-                txtProductoId.getText().isBlank()
-                        || txtNombreProducto.getText().isBlank()
-                        || txtCategoria.getText().isBlank()
-                        || txtPrecio.getText().isBlank()
-                        || txtCantidad.getText().isBlank()
-                        || rutaImagenSeleccionada == null;
+        boolean camposVacios =
+                txtProductoId
+                        .getText()
+                        .isBlank()
+                        || txtNombreProducto
+                        .getText()
+                        .isBlank()
+                        || txtCategoria
+                        .getText()
+                        .isBlank()
+                        || txtPrecio
+                        .getText()
+                        .isBlank()
+                        || txtCantidad
+                        .getText()
+                        .isBlank();
 
-        if (hayCamposVacios) {
+        if (camposVacios) {
 
             mostrarAlerta(
                     Alert.AlertType.WARNING,
-                    "Datos incompletos",
-                    "Complete todos los campos "
-                            + "y seleccione una imagen."
+                    "Campos incompletos",
+                    "Debe completar todos los campos."
+            );
+
+            return false;
+        }
+
+        if (rutaImagenSeleccionada == null
+                || rutaImagenSeleccionada.isBlank()) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Imagen requerida",
+                    "Debe seleccionar una imagen para la artesanía."
             );
 
             return false;
@@ -429,6 +537,7 @@ public class ArtesaniaController {
         txtCantidad.clear();
 
         rutaImagenSeleccionada = null;
+
         imgVistaPrevia.setImage(null);
 
         txtProductoId.requestFocus();
@@ -437,7 +546,8 @@ public class ArtesaniaController {
     private ImageView crearVistaImagen(
             String rutaImagen) {
 
-        ImageView vista = new ImageView();
+        ImageView vista =
+                new ImageView();
 
         vista.setFitWidth(65);
         vista.setFitHeight(50);
@@ -447,7 +557,10 @@ public class ArtesaniaController {
                 && !rutaImagen.isBlank()) {
 
             vista.setImage(
-                    new Image(rutaImagen, true)
+                    new Image(
+                            rutaImagen,
+                            true
+                    )
             );
         }
 
@@ -459,7 +572,8 @@ public class ArtesaniaController {
             String titulo,
             String mensaje) {
 
-        Alert alerta = new Alert(tipo);
+        Alert alerta =
+                new Alert(tipo);
 
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);

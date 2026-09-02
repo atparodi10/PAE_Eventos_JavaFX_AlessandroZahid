@@ -1,14 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="580.0" prefWidth="780.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ni.edu.uam.pae_eventos_javafx.controllers.MenuController">
+    <children>
+        <Rectangle arcHeight="18.0" arcWidth="18.0"
+                   fill="#23395D"
+                   height="105.0"
+                   layoutX="0.0"
+                   layoutY="0.0"
+                   stroke="#23395D"
+                   width="780.0" />
 
+        <Label alignment="CENTER"
+               contentDisplay="CENTER"
+               layoutX="140.0"
+               layoutY="21.0"
+               prefHeight="40.0"
+               prefWidth="500.0"
+               text="CENTRO DE OPERACIONES"
+               textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="27.0" />
+            </font>
+        </Label>
+
+        <Label alignment="CENTER"
+               layoutX="140.0"
+               layoutY="65.0"
+               prefWidth="500.0"
+               text="Seleccione el ejercicio que desea utilizar"
+               textFill="#DCE6F2">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <Separator layoutX="0.0"
+                   layoutY="105.0"
+                   prefWidth="780.0" />
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#E8F5E9"
+                   height="120.0"
+                   layoutX="45.0"
+                   layoutY="130.0"
+                   stroke="#3E8E41"
+                   width="690.0" />
+
+        <Label layoutX="70.0"
+               layoutY="148.0"
+               text="Reto 1 · Inventario de pulpería">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="70.0"
+               layoutY="181.0"
+               prefHeight="45.0"
+               prefWidth="460.0"
+               text="Registre código, nombre, precio y cantidad. Para buscar un producto, escriba su código y presione Enter."
+               wrapText="true" />
+
+        <Button layoutX="565.0"
+                layoutY="169.0"
+                mnemonicParsing="false"
+                onAction="#abrirPulperiaOnAction"
+                prefHeight="40.0"
+                prefWidth="145.0"
+                text="Abrir pulpería" />
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#EFEBE9"
+                   height="120.0"
+                   layoutX="45.0"
+                   layoutY="270.0"
+                   stroke="#795548"
+                   width="690.0" />
+
+        <Label layoutX="70.0"
+               layoutY="288.0"
+               text="Reto 2 · Recepción de café">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="70.0"
+               layoutY="321.0"
+               prefHeight="45.0"
+               prefWidth="460.0"
+               text="Administre lotes, proveedores, fechas de producción, vencimiento y cantidades recibidas."
+               wrapText="true" />
+
+        <Button layoutX="565.0"
+                layoutY="309.0"
+                mnemonicParsing="false"
+                onAction="#abrirCafeOnAction"
+                prefHeight="40.0"
+                prefWidth="145.0"
+                text="Abrir café" />
+
+        <Rectangle arcHeight="16.0"
+                   arcWidth="16.0"
+                   fill="#FFF3E0"
+                   height="120.0"
+                   layoutX="45.0"
+                   layoutY="410.0"
+                   stroke="#B45F32"
+                   width="690.0" />
+
+        <Label layoutX="70.0"
+               layoutY="428.0"
+               text="Reto 3 · Tienda de artesanías">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="70.0"
+               layoutY="461.0"
+               prefHeight="45.0"
+               prefWidth="460.0"
+               text="Explore el catálogo con imágenes, agregue artesanías, busque productos y registre ventas."
+               wrapText="true" />
+
+        <Button layoutX="565.0"
+                layoutY="449.0"
+                mnemonicParsing="false"
+                onAction="#abrirArtesaniasOnAction"
+                prefHeight="40.0"
+                prefWidth="145.0"
+                text="Abrir tienda" />
+
+        <Label alignment="CENTER"
+               layoutX="140.0"
+               layoutY="548.0"
+               prefWidth="500.0"
+               text="Cada ejercicio se abrirá en una ventana independiente." />
+    </children>
 </AnchorPane>
