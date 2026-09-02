@@ -1,4 +1,18 @@
 package ni.edu.uam.pae_eventos_javafx.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Producto {
+    private String codigo;
+    private String nombre;
+    private double precio;
+    private int cantidad;
 }
